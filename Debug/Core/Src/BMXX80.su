@@ -1,0 +1,11 @@
+BMXX80.c:70:9:BMP280_Read8	40	static
+BMXX80.c:118:10:BMP280_Read16	40	static
+BMXX80.c:136:10:BMP280_Read16LE	24	static
+BMXX80.c:179:6:BMP280_Write8	32	static
+BMXX80.c:195:10:BMP280_Read24	40	static
+BMXX80.c:326:6:BMP280_SetConfig	16	static
+BMXX80.c:331:6:BMP280_Init	16	static
+BMXX80.c:488:7:BMP280_ReadTemperature	32	static
+BMXX80.c:626:9:BMP280_ReadPressure	136	static
+BMXX80.c:730:9:BMP280_ReadTemperatureAndPressure	144	static
+BMXX80.c:765:7:BMP280_ReadAltitude	24	static
