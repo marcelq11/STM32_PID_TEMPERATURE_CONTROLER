@@ -26,6 +26,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+
 /*
  *         PCF8574 <-> HD44780
  *
@@ -34,7 +35,7 @@
  *
  * */
 
-#define HI2C_DEF hi2c1
+#define HI2C_DEF hi2c4
 
 #define RS_PIN 0x01
 #define RW_PIN 0x02

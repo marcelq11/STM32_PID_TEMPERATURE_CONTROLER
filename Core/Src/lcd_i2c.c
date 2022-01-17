@@ -23,6 +23,7 @@
 
 #include "lcd_i2c.h"
 #include "stm32f7xx_hal.h"
+#include "i2c.h"
 
 
 

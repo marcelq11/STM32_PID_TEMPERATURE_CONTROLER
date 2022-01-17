@@ -44,12 +44,13 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+#define COUNTOF(__BUFFER__) (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+char data[]="0000000";
 float temperature;
 struct lcd_disp disp;
 /* USER CODE END PV */
@@ -93,20 +94,22 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_I2C1_Init();
   MX_I2C4_Init();
   MX_TIM3_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
+  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 1000);
   BMP280_Init(&hi2c1, BMP280_TEMPERATURE_16BIT, BMP280_STANDARD, BMP280_FORCEDMODE);
-  disp.addr = (0x4E);
+  /*disp.addr = (0x4E);
   disp.bl = true;
   lcd_init(&disp);
   HAL_Delay(5000);
   sprintf((char *)disp.f_line, "jakies cos");
-  lcd_display(&disp);
+  lcd_display(&disp);*/
+
 
 
   /* USER CODE END 2 */
@@ -115,14 +118,18 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  temperature = BMP280_ReadTemperature();
+	  sprintf(data," %f\n ",temperature);
+	  HAL_UART_Transmit(&huart3, (uint8_t *)data, (COUNTOF(data)-1), 50);
+	  HAL_Delay(500);
+	  HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+	  HAL_Delay(500);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  temperature = BMP280_ReadTemperature();
-	  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 500);
-	  HAL_Delay(500);
-	  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 1000);
-	  HAL_Delay(500);
+
+
 
   }
   /* USER CODE END 3 */
