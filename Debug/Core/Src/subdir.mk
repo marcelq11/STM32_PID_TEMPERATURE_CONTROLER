@@ -6,6 +6,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Core/Src/BMXX80.c \
+../Core/Src/PID_discrete_simple.c \
 ../Core/Src/gpio.c \
 ../Core/Src/i2c.c \
 ../Core/Src/lcd_i2c.c \
@@ -21,6 +22,7 @@ C_SRCS += \
 
 C_DEPS += \
 ./Core/Src/BMXX80.d \
+./Core/Src/PID_discrete_simple.d \
 ./Core/Src/gpio.d \
 ./Core/Src/i2c.d \
 ./Core/Src/lcd_i2c.d \
@@ -36,6 +38,7 @@ C_DEPS += \
 
 OBJS += \
 ./Core/Src/BMXX80.o \
+./Core/Src/PID_discrete_simple.o \
 ./Core/Src/gpio.o \
 ./Core/Src/i2c.o \
 ./Core/Src/lcd_i2c.o \

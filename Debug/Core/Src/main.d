@@ -34,7 +34,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h \
  ../Core/Inc/i2c.h ../Core/Inc/main.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/usb_otg.h ../Core/Inc/gpio.h \
- ../Core/Inc/lcd_i2c.h ../Core/Inc/BMPXX80.h
+ ../Core/Inc/lcd_i2c.h ../Core/Inc/BMPXX80.h \
+ ../Core/Inc/PID_discrete_simple.h
 
 ../Core/Inc/main.h:
 
@@ -119,3 +120,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/lcd_i2c.h:
 
 ../Core/Inc/BMPXX80.h:
+
+../Core/Inc/PID_discrete_simple.h:
