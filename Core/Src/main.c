@@ -51,14 +51,18 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-char data[]="0000000";
-char data1[]="0000000";
+char data[7];
+char data1[9];
+char data2[9];
 float32_t temperature;
+uint8_t tzad[1];
 float pwm_duty_f = 0;
 uint16_t pwm_duty = 0;
 struct lcd_disp disp;
+float32_t set_point=26.00;
 
-pid_data_t pid1={.p.Kp=0.30702, .p.Ki=0.0027894, .p.Kd=2.3599, .p.dt=1.0, .previous_error=0, .previous_integral=0};
+pid_data_t pid1={.p.Kp=0.031, .p.Ki=0.000214, .p.Kd=0, .p.dt=1.0, .previous_error=0, .previous_integral=0};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -97,6 +101,7 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -108,11 +113,13 @@ int main(void)
   MX_USART3_UART_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_StatusTypeDef status =HAL_UART_Receive(&huart3, tzad, 1, 1);
   HAL_TIM_Base_Start_IT(&htim3);
   HAL_TIM_PWM_Start (&htim1, TIM_CHANNEL_1);
   __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,0);
   BMP280_Init(&hi2c1, BMP280_TEMPERATURE_16BIT, BMP280_STANDARD, BMP280_FORCEDMODE);
+  HAL_UART_Receive_IT(&huart3, &tzad, 2);
+
   disp.addr = (0x4E);
   disp.bl = true;
   lcd_init(&disp);
@@ -124,11 +131,20 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  sprintf(data1," %f\ ",temperature);
+	  sprintf(data,"\n %.2f",temperature);
+	  sprintf(data1,"Ta: %.2f",temperature);
+	  sprintf(data2,"Tz: %.2f",set_point);
 	  HAL_UART_Transmit(&huart3, (uint8_t *)data, (COUNTOF(data)-1), 50);
 	  HAL_Delay(1000);
-	  sprintf((char *)disp.f_line,data1);
+
+	  if (HAL_GPIO_ReadPin(Button_GPIO_Port, Button_Pin) == 1) {
+		  sprintf((char *)disp.f_line, data2);
+	  } else {
+		  sprintf((char *)disp.f_line, data1);
+	  }
+
 	  lcd_display(&disp);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -197,16 +213,28 @@ void SystemClock_Config(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance == TIM3){
 		  temperature = BMP280_ReadTemperature();
-		  float32_t set_point=26.0;
+
 		  pwm_duty_f = (999.0*calculate_discrete_pid(&pid1, set_point, temperature));
 		  pwm_duty = 0;
 		  if(pwm_duty_f<0) pwm_duty=0; else
 		  if(pwm_duty_f>999.0) pwm_duty = 999; else
 			  pwm_duty = (uint16_t)pwm_duty_f;
-		  sprintf(data," %i\ ",pwm_duty);
 		  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, pwm_duty);
 	}
 }
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	if(huart->Instance == USART3){
+			switch(tzad[0])
+			{
+			case'x':set_point-=0.5;break;
+			case'z':set_point+=0.5;break;
+			}
+		HAL_UART_Receive_IT(&huart3, tzad, 1);
+	}
+}
+
+
 
 /* USER CODE END 4 */
 
