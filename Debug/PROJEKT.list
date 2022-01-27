@@ -2986,7 +2986,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  sprintf(data,"\n %.2f",temperature);
+	  sprintf(data," %.2f",temperature);
  8001a7e:	4b26      	ldr	r3, [pc, #152]	; (8001b18 <main+0x114>)
  8001a80:	681b      	ldr	r3, [r3, #0]
  8001a82:	4618      	mov	r0, r3
@@ -3048,7 +3048,7 @@ int main(void)
 	  lcd_display(&disp);
  8001af6:	4807      	ldr	r0, [pc, #28]	; (8001b14 <main+0x110>)
  8001af8:	f7ff ff16 	bl	8001928 <lcd_display>
-	  sprintf(data,"\n %.2f",temperature);
+	  sprintf(data," %.2f",temperature);
  8001afc:	e7bf      	b.n	8001a7e <main+0x7a>
  8001afe:	bf00      	nop
  8001b00:	2000030c 	.word	0x2000030c

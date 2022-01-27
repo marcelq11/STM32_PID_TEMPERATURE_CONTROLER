@@ -59,7 +59,7 @@ uint8_t tzad[1];
 float pwm_duty_f = 0;
 uint16_t pwm_duty = 0;
 struct lcd_disp disp;
-float32_t set_point=26.00;
+float32_t set_point=34.00;
 
 pid_data_t pid1={.p.Kp=0.031, .p.Ki=0.000214, .p.Kd=0, .p.dt=1.0, .previous_error=0, .previous_integral=0};
 
@@ -131,7 +131,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  sprintf(data,"\n %.2f",temperature);
+	  sprintf(data," %.2f",temperature);
 	  sprintf(data1,"Ta: %.2f",temperature);
 	  sprintf(data2,"Tz: %.2f",set_point);
 	  HAL_UART_Transmit(&huart3, (uint8_t *)data, (COUNTOF(data)-1), 50);
